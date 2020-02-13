@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# docker build -f adm/Dockerfile -t sawtooth-adm-local .
+# docker build -f families/smallbank/smallbank_rust/Dockerfile -t sawtooth-smallbank-tp-rust-local .
 
 FROM ubuntu:eoan
 
@@ -26,17 +26,20 @@ RUN apt-get update \
  unzip \
  protobuf-compiler
 
-# For Building Protobufs
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
+RUN update-ca-certificates -f
+
+RUN curl https://sh.rustup.rs -sSf > /usr/bin/rustup-init \
+ && chmod +x /usr/bin/rustup-init \
+ && rustup-init -y
 
 ENV PATH=$PATH:/project/sawtooth-core/bin:/protoc3/bin:/root/.cargo/bin \
     CARGO_INCREMENTAL=0
 
-WORKDIR /project/sawtooth-core/
+WORKDIR /project/sawtooth-core
 
-CMD cd adm \
- && echo "\033[0;32m--- Building sawtooth admin tools ---\n\033[0m" \
+CMD cd families/smallbank/smallbank_rust \
+ && echo "\033[0;32m--- Building smallbank-tp-rust ---\n\033[0m" \
  && rm -rf ./bin/ \
  && mkdir -p ./bin/ \
  && cargo build --release \
- && cp ./target/release/sawadm ./bin/sawadm
+ && cp ./target/release/smallbank_rust ./bin/smallbank_rust

@@ -12,26 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# docker build -f rest_api/Dockerfile -t sawtooth-rest-api-local .
+# docker build -f cli/Dockerfile-installed -t sawtooth-sdk-cli-local .
 
-# -------------=== rest_api build ===-------------
+# -------------=== cli build ===-------------
 
 FROM sawtooth-core-base-arm:1.2.4
 
+ENV VERSION=AUTO_STRICT
+
 RUN apt-get install -y -q \
-    python3-aiodns \
-    python3-aiohttp
-
-RUN pip3 install -v cchardet
-
-RUN mkdir -p /var/log/sawtooth
+    python3-toml
 
 ENV PATH=$PATH:/project/sawtooth-core/bin
 
 WORKDIR /project/sawtooth-core
 
-CMD echo "\033[0;32m--- Building rest_api ---\n\033[0m" \
+CMD echo "\033[0;32m--- Building cli ---\n\033[0m" \
  && bin/protogen \
- && cd rest_api \
+ && cd cli \
  && python3 setup.py clean --all \
  && python3 setup.py build

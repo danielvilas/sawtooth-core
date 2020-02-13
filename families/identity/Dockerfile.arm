@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# ------------------------------------------------------------------------------
 
-# docker build -f adm/Dockerfile -t sawtooth-adm-local .
+# docker build -f families/identity/Dockerfile -t sawtooth-identity-tp-local .
 
 FROM ubuntu:eoan
 
@@ -26,17 +27,20 @@ RUN apt-get update \
  unzip \
  protobuf-compiler
 
-# For Building Protobufs
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
+RUN update-ca-certificates -f
+
+RUN curl https://sh.rustup.rs -sSf > /usr/bin/rustup-init \
+ && chmod +x /usr/bin/rustup-init \
+ && rustup-init -y
 
 ENV PATH=$PATH:/project/sawtooth-core/bin:/protoc3/bin:/root/.cargo/bin \
     CARGO_INCREMENTAL=0
 
-WORKDIR /project/sawtooth-core/
+WORKDIR /project/sawtooth-core
 
-CMD cd adm \
- && echo "\033[0;32m--- Building sawtooth admin tools ---\n\033[0m" \
+CMD cd families/identity/sawtooth_identity \
+ && echo "\033[0;32m--- Building identity-tp ---\n\033[0m" \
  && rm -rf ./bin/ \
  && mkdir -p ./bin/ \
  && cargo build --release \
- && cp ./target/release/sawadm ./bin/sawadm
+ && cp ./target/release/identity-tp ./bin/identity-tp
