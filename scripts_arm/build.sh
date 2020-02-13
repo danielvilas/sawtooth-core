@@ -41,7 +41,7 @@ case  $1 in
         ;;
 esac
 
-source ./scripts_arm/config.sh
+. ./scripts_arm/config.sh
 
 if [ ! -z $ball ]
   then

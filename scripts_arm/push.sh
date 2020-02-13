@@ -12,7 +12,7 @@ if [ ! -f ./scripts_arm/config.sh ]; then
     exit
 fi
 
-source ./scripts_arm/config.sh
+. ./scripts_arm/config.sh
 
 for i in $images
 do
