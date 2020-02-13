@@ -4,8 +4,14 @@ if [ -z "$1" ]
   then
     echo "No argument supplied - need repository owner (danielvilas)"
     exit
+fi
 
-source config.sh
+if [ ! -f ./scripts_arm/config.sh ]; then
+    echo "Please execute from root dir"
+    exit
+fi
+
+source ./scripts_arm/config.sh
 
 for i in $images
 do
